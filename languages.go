@@ -1,8 +1,8 @@
 package sloc
 
 var CStyleComments = CommentStyle{
-	"\\/\\/", // ughhh - go regex
-	[]string{"\\/\\*", "\\*\\/"},
+	LinePre("\\/\\/"), // ughhh - go regex
+	[]string{LinePre("\\/\\*"), "\\*\\/"},
 }
 
 var Languages = []*Language{
@@ -11,11 +11,11 @@ var Languages = []*Language{
 	&Language{"Java", []string{"java"}, &CStyleComments},
 	&Language{"JavaScript", []string{"js"}, &CStyleComments},
 	&Language{"Go", []string{"go"}, &CStyleComments},
-	&Language{"Ruby", []string{"rb"}, &CommentStyle{"#", []string{"=begin", "^=end"}}},
-	&Language{"Python", []string{"py"}, &CommentStyle{"#", []string{"=begin", "^=end"}}},
-	&Language{"Lua", []string{"lua"}, &CommentStyle{"--", []string{"--[[", "]]--"}}},
-	&Language{"Lisp", []string{"el", "lsp", "scm"}, &CommentStyle{";", []string{}}},
-	&Language{"Shell", []string{"sh"}, &CommentStyle{"#", []string{}}},
+	&Language{"Ruby", []string{"rb"}, &CommentStyle{LinePre("#"), []string{"^=begin", "^=end"}}},
+	&Language{"Python", []string{"py"}, &CommentStyle{LinePre("#"), []string{"^=begin", "^=end"}}},
+	&Language{"Lua", []string{"lua"}, &CommentStyle{LinePre("--"), []string{"--[[", "]]--"}}},
+	&Language{"Lisp", []string{"el", "lsp", "scm"}, &CommentStyle{LinePre(";"), nil}},
+	&Language{"Shell", []string{"sh"}, &CommentStyle{LinePre("#"), nil}},
 }
 
 func isAny(s string, a []string) bool {

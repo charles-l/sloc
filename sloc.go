@@ -23,6 +23,11 @@ type Language struct {
 	CommentStyle *CommentStyle
 }
 
+// Define the line prefix (ignoring whitespace)
+func LinePre(match string) string {
+	return "^\\s*" + match
+}
+
 func isBlankLine(l string) bool {
 	for _, r := range l {
 		if !unicode.IsSpace(r) {
@@ -32,18 +37,9 @@ func isBlankLine(l string) bool {
 	return true
 }
 
-func isSingleComment(l []byte, style *CommentStyle) bool {
-	m, _ := regexp.Match("^\\s*"+style.SingleComment, l)
-	return m
-}
-
-func isMultilineCommentStart(style *CommentStyle, l []byte) bool {
-	m, _ := regexp.Match("^\\s*"+style.MultiComment[0], l)
-	return m
-}
-
-func isMultilineCommentEnd(style *CommentStyle, l []byte) bool {
-	m, _ := regexp.Match(style.MultiComment[1], l)
+// regex match (throw away the error)
+func rmatch(l []byte, r string) bool {
+	m, _ := regexp.Match(r, l)
 	return m
 }
 
@@ -55,11 +51,11 @@ func skipMultilineComment(s *bufio.Scanner, style *CommentStyle) int {
 		return 0
 	}
 
-	if isMultilineCommentStart(style, s.Bytes()) {
+	if rmatch(s.Bytes(), style.MultiComment[0]) {
 		i := 0
 		for {
 			i++
-			if isMultilineCommentEnd(style, s.Bytes()) {
+			if rmatch(s.Bytes(), style.MultiComment[1]) {
 				return i
 			}
 			s.Scan()
@@ -80,7 +76,7 @@ func CountLines(i io.Reader, l *Language) int {
 	} else {
 		shouldSkipLine = func(b string) bool {
 			return isBlankLine(b) ||
-				isSingleComment([]byte(b), l.CommentStyle) ||
+				rmatch([]byte(b), l.CommentStyle.SingleComment) ||
 				skipMultilineComment(s, l.CommentStyle) != 0
 		}
 	}

@@ -39,7 +39,7 @@ func TestSingleCommentLine(t *testing.T) {
 		{[]byte("'//in a string'"), false},
 	}
 	for _, test := range tests {
-		if r := isSingleComment(test.input, &CStyleComments); r != test.out {
+		if r := rmatch(test.input, CStyleComments.SingleComment); r != test.out {
 			t.Errorf("singleInputLine(%q) = %v; want %v", test.input, r, test.out)
 		}
 	}
