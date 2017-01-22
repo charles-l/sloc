@@ -43,6 +43,14 @@ func rmatch(l []byte, r string) bool {
 	return m
 }
 
+func multiStart(style *CommentStyle) string {
+	return style.MultiComment[0]
+}
+
+func multiEnd(style *CommentStyle) string {
+	return style.MultiComment[1]
+}
+
 // return number of lines in multiline comment
 // Note: this function expects s to have scanned the first line already
 func skipMultilineComment(s *bufio.Scanner, style *CommentStyle) int {
@@ -51,11 +59,11 @@ func skipMultilineComment(s *bufio.Scanner, style *CommentStyle) int {
 		return 0
 	}
 
-	if rmatch(s.Bytes(), style.MultiComment[0]) {
+	if rmatch(s.Bytes(), multiStart(style)) {
 		i := 0
 		for {
 			i++
-			if rmatch(s.Bytes(), style.MultiComment[1]) {
+			if rmatch(s.Bytes(), multiEnd(style)) {
 				return i
 			}
 			s.Scan()
