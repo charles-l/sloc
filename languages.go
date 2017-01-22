@@ -7,7 +7,7 @@ var CStyleComments = CommentStyle{
 
 var Languages = []*Language{
 	&Language{"C", []string{"c", "h"}, &CStyleComments},
-	&Language{"C++", []string{"cpp", "cc", "h", "hh"}, &CStyleComments},
+	&Language{"C++", []string{"cpp", "cc", "hh", "hpp"}, &CStyleComments},
 	&Language{"Java", []string{"java"}, &CStyleComments},
 	&Language{"JavaScript", []string{"js"}, &CStyleComments},
 	&Language{"Go", []string{"go"}, &CStyleComments},
