@@ -1,3 +1,4 @@
+// Package sloc provides function for counting source lines of code.
 package sloc
 
 import (
@@ -7,11 +8,15 @@ import (
 	"unicode"
 )
 
+// A CommentStyle for a Language describing how to match a comment
+// so it can be ignored in the sloc count.
 type CommentStyle struct {
 	SingleComment string
 	MultiComment  []string
 }
 
+// A Language is used for matching an extension and describing
+// how to name a languge and match a comment
 type Language struct {
 	Name         string
 	Ext          []string
@@ -64,6 +69,7 @@ func skipMultilineComment(s *bufio.Scanner, style *CommentStyle) int {
 	}
 }
 
+// Counts the lines of code from a Reader stream.
 func CountLines(i io.Reader, l *Language) int {
 	s := bufio.NewScanner(i)
 	sourceLines := 0
