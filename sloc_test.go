@@ -83,7 +83,7 @@ func TestCountLines(t *testing.T) {
 	}
 	for _, test := range tests {
 		r := bytes.NewReader(test.input)
-		if r := CountLines(r, &Languages[0]); r != test.out {
+		if r := CountLines(r, Languages[0]); r != test.out {
 			t.Errorf("CountLines(%q) = %v; want %v", test.input, r, test.out)
 		}
 		r = bytes.NewReader(test.input)
